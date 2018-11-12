@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h2>{% block title %}Home{% endblock %}</h2>
+  {% if 'username' in session %}
+    <a class="action" href="{{ url_for('books.search') }}">Search books</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<h3>About</h3>
+
+<p>Once you register for this website you will be able to search for books, leave reviews, and see the reviews made by other people.</p>
+
+{% endblock %}
