@@ -33,7 +33,7 @@ def register():
             )
             db.commit()
             session['username'] = username
-            return redirect(url_for('books.search'))
+            return redirect(url_for('books.index'))
         flash(error)
 
     return render_template('auth/register.html')
@@ -58,9 +58,12 @@ def login():
             session.clear()
             session['user_id'] = user['id']
             session['username'] = user['name']
-            return redirect(url_for('books.search'))
+            return redirect(url_for('books.index'))
+  
+    if 'user_id' in session:
+        return redirect(url_for('books.index'))
 
-        flash(error)
+    flash(error)
 
     return render_template('auth/login.html')
 
@@ -68,6 +71,7 @@ def login():
 @bp.route('/logout')
 def logout():
     session.clear()
+    flash('You have been logged out.')
     return redirect(url_for('index'))
 
 
@@ -77,6 +81,7 @@ def login_required(view):
         if 'user_id' in session:
             return view(**kwargs)
         else:
+            flash('You need to login first.')
             return redirect(url_for('auth.login'))
 
     return wrapped_view

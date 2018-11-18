@@ -1,11 +1,9 @@
-{% extends "layout.html" %}
+{% extends 'base.html' %}
 
-{% block title %}
-    Error
-{% endblock %}
+{% block content %}
+<h2>{% block title %}Error{% endblock %}</h2>
+<a class="action" href="{{ url_for('books.search') }}">Search books</a>
 
-{% block body %}
-    <h1>Error</h1>
+{{ message }}
 
-    {{ message }}
 {% endblock %}

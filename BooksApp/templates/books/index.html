@@ -1,15 +1,127 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h2>{% block title %}Home{% endblock %}</h2>
-  {% if 'username' in session %}
-    <a class="action" href="{{ url_for('books.search') }}">Search books</a>
-  {% endif %}
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-<h3>About</h3>
 
-<p>Once you register for this website you will be able to search for books, leave reviews, and see the reviews made by other people.</p>
+<!-- Header -->
+<header class="masthead d-flex">
+    <div class="container text-center my-auto">
+        <h1 class="mb-1">BooksApp</h1>
+        <h2 class="mb-5">
+            <em>Book review website</em>
+        </h2>
+        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#getstarted">Get started</a>
+    </div>
+    <div class="overlay"></div>
+</header>
+
+<!-- Get started -->
+<section class="content-section bg-light" id="getstarted">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+
+                {% if 'username' in session %}
+                <h3>Start searching</h3>
+                <a class="btn btn-dark btn-xl m-3" href="{{ url_for('books.search') }}">Search books</a>
+                {% else %}
+                <h3>Log in, or if you don't have an account register first</h3>
+                <p class="lead mb-5">No worries, we only need login and password (no personal info)!</p>
+                <a class="btn btn-dark btn-xl m-3" href="{{ url_for('auth.register') }}">Register</a>
+                <a class="btn btn-dark btn-xl m-3" data-toggle="modal" href="#login">Log in</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="login" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="mr-auto"><i class="fas fa-unlock"></i> Log in</h4>
+                <button type="button" class="close ml-auto" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('auth.login') }}" method="post" role="form">
+                    <div class="form-group">
+
+                        <label for="username"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-key"></i> Password</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Enter password" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Log in</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger pull-left mr-auto" data-dismiss="modal"><i class="fas fa-ban"></i> Cancel</button>
+                <p>Not a member? <a href="{{ url_for('auth.register') }}">Register</a></p>
+                <p>Forgot <a href="mailto:adam@pythonsway.online">Password?</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features -->
+<section class="content-section bg-primary text-white text-center" id="features">
+    <div class="container">
+        <div class="content-section-heading">
+            <h2 class="text-secondary mb-0">Features</h2>
+            <h3 class="mb-5">What you can do with this website</h3>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                <span class="service-icon rounded-circle mx-auto mb-3">
+                    <i class="fas fa-search"></i>
+                </span>
+                <h4>
+                    <strong>Search</strong>
+                </h4>
+                <p class="text-faded mb-0">Browse catalog</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                <span class="service-icon rounded-circle mx-auto mb-3">
+                    <i class="fas fa-pencil-alt"></i>
+                </span>
+                <h4>
+                    <strong>Write</strong>
+                </h4>
+                <p class="text-faded mb-0">Leave reviews</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+                <span class="service-icon rounded-circle mx-auto mb-3">
+                    <i class="far fa-comments"></i>
+                </span>
+                <h4>
+                    <strong>Read</strong>
+                </h4>
+                <p class="text-faded mb-0">See reviews made by other users</p>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <span class="service-icon rounded-circle mx-auto mb-3">
+                    <i class="fas fa-star-half-alt"></i>
+                </span>
+                <h4>
+                    <strong>Goodreads&reg;</strong>
+                </h4>
+                <p class="text-faded mb-0">Pull ratings from a broader audience</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Callout -->
+<section class="callout" id="api">
+    <div class="container text-center">
+        <h2 class="mx-auto mb-5"> Query for book details and reviews programmatically via website’s API</h2>
+        <a class="btn btn-primary btn-xl" href="{{ url_for('books.api') }}">API</a>
+    </div>
+</section>
 
 {% endblock %}

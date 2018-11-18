@@ -2,36 +2,137 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{% block title %}{% endblock %} - Book review website</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Book review website">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/booksapp.css') }}">
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
+
+    <title>{% block title %}{% endblock %} - Book review website</title>
 </head>
 
-<body>
-  <nav>
-    <h1><a href="{{ url_for('index') }}">BooksApp</a></h1>
-    <ul>
-      {% if 'username' in session %}
-      <li><span>{{ session['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-        {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>
-        {% endif %}
-    </ul>
-  </nav>
-  <section class="content">
-    <header>
-      {% block header %}{% endblock %}
-    </header>
-    {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-    {% endfor %}
-    {% block content %}{% endblock %}
-  </section>
+<body id="page-top">
 
+    <!-- Navigation -->
+    <a class="menu-toggle rounded" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a class="js-scroll-trigger" href="{{ url_for('books.index') }}">BooksApp</a>
+            </li>
+
+            {% if 'username' in session %}
+            <li class="dropdown-divider">
+            </li>
+            <li class="sidebar-nav-item text-white font-weight-bold p-3">
+                <span>Hello </span>
+                <span class="badge badge-pill badge-dark"> {{ session['username'] }}</span>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{{ url_for('auth.logout') }}">Log Out</a>
+            </li>
+            <li class="dropdown-divider">
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{{ url_for('books.search') }}">Search</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="#contact">Contact</a>
+            </li>
+            {% else %}
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="#getstarted">Get started</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="#contact">Contact</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Page Content and Flashed messages-->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+
+                {% if "type" in message %}
+                <div class="alert alert-{{ message[1] }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{ message[2] }}
+                </div>
+
+                {% else %}
+
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{ message }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+    {% block content %}{% endblock %}
+
+
+    <!-- Contact -->
+    <section class="content-section bg-primary text-white" id="contact">
+        <div class="container text-center">
+            <h2>To contact use links below:</h2>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <ul class="list-inline mb-5">
+                <li class="list-inline-item">
+                    <a class="social-link rounded-circle text-white mr-3" href="https://www.facebook.com/pythons.way/" target="_blank">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a class="social-link rounded-circle text-white mr-3" href="https://twitter.com/Pythons_way" target="_blank">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a class="social-link rounded-circle text-white" href="mailto:adam@pythonsway.online">
+                        <i class="far fa-envelope"></i>
+                    </a>
+                </li>
+            </ul>
+            <p class="text-muted small mb-0">&copy; BooksApp 2018</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- jQuery first, then Popper, Bootstrap , plugins, custom  js-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="{{ url_for('static', filename='js/booksapp.min.js') }}"></script>
 </body>
 
 </html>

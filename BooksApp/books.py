@@ -69,7 +69,9 @@ def add_review(isbn, book_id):
                {'book_id': book_id, 'user_id': user_id, 'rating': rating, 'review': review})
     db.commit()
 
-    return render_template('books/review.html')
+    flash('Added review.')
+
+    return redirect(request.referrer)
 
 
 @bp.route('/api/<isbn>')
@@ -87,3 +89,7 @@ def get_api(isbn):
                    isbn=book['isbn'],
                    review_count=resGoodreads['work_ratings_count'],
                    average_score=resGoodreads['average_rating'])
+
+@bp.route('/api')
+def api():
+    return render_template('books/api.html')

@@ -1,60 +1,133 @@
 {% extends 'base.html' %}
 
-{% block header %}
-<p><a href="{{ url_for('books.search') }}">Search again</a></p>
-<h2>{% block title %}Book details{% endblock %}</h2>
-{% endblock %}
+{% block title %}Book details{% endblock %}
 
 {% block content %}
 
-<ul>
-    <li>Title: {{ book.title }}</li>
-    <li>Author: {{ book.author }}</li>
-    <li>Year: {{ book.publication }}</li>
-</ul>
+<header class="d-flex pt-5">
+    <div class="container text-center align-content-end">
+        <h1 class="mb-2">Book details</h1>
+        <h2>
+            <em>Info, ratings, reviews</em>
+        </h2>
+    </div>
+</header>
 
-<h3>Data from Goodreads:</h3>
-{% if resGoodreads['work_ratings_count'] %}
-<p>Average rating: {{ resGoodreads['average_rating'] }}</p>
-<p>Number of ratings: {{ resGoodreads['work_ratings_count'] }}</p>
-{% else %}
-<p>No data.</p>
-{% endif %}
+<section class="content-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-6">
+                <h3>Book info</h3>
+                <table class="table">
+                    <tr>
+                        <th scope="row">Title</th>
+                        <td>{{ book.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Author</th>
+                        <td>{{ book.author }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Year</th>
+                        <td>{{ book.publication }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-light" scope="col" colspan="2">Data from Goodreads&reg;:</th>
+                    </tr>
 
-<h3>Reviews:</h3>
-{% if user > 0 %}
-<p>You already reviewed this book.</p>
-{% else %}
-<p>Add review:</p>
-<form action="{{ url_for('books.add_review', isbn=book['isbn'], book_id=book['id']) }}" method='post'>
-    <label for="rating">Rating</label>
+                    {% if resGoodreads['work_ratings_count'] %}
 
-    <label for="1">1</label>
-    <input type="radio" id="1" name="rating" value="1" checked>
-    <label for="2">2</label>
-    <input type="radio" id="2" name="rating" value="2">
-    <label for="3">3</label>
-    <input type="radio" id="3" name="rating" value="3">
-    <label for="4">4</label>
-    <input type="radio" id="4" name="rating" value="4">
-    <label for="5">5</label>
-    <input type="radio" id="5" name="rating" value="5">
-    <hr>
-    <label for="review">Review</label>
-    <input name="review" name="review" id="review">
-    <input type="submit" value="Submit">
-</form>
-{% endif %}
+                    <tr>
+                        <th scope="row">Average rating</th>
+                        <td>{{ resGoodreads['average_rating'] }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Number of ratings</th>
+                        <td>{{ resGoodreads['work_ratings_count'] }}</td>
+                    </tr>
 
-<ul>
-    {% for review in reviews %}
-    <li>{{ review.rating }}</li>
-    <li>{{ review.review }}</li>
-    {% if not loop.last %}
-    <hr>
-    {% endif %}
-    {% else %}
-    <p>No reviews yet.</p>
-    {% endfor %}
-</ul>
+                    {% else %}
+                    <tr>
+                        <td>No data</td>
+                    </tr>
+                    {% endif %}
+                </table>
+                <p><a href="{{ url_for('books.search') }}">Search again</a></p>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col">
+                <h3 class="p-3 bg-light">Reviews</h3>
+                <h4>Add review:</h4>
+                {% if user > 0 %}
+                <p>You already reviewed this book.</p>
+                {% else %}
+                <form action="{{ url_for('books.add_review', isbn=book['isbn'], book_id=book['id']) }}" method='post'>
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-2 pt-0">Rating (1-5)</legend>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="1" name="rating" value="1" checked>
+                                    <label class="form-check-label" for="1"> 1</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="2" name="rating" value="2">
+                                    <label class="form-check-label" for="2"> 2</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="3" name="rating" value="3">
+                                    <label class="form-check-label" for="3"> 3</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="4" name="rating" value="4">
+                                    <label class="form-check-label" for="4"> 4</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="5" name="rating" value="5">
+                                    <label class="form-check-label" for="5"> 5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group row">
+                        <label for="review" class="col-sm-2 col-form-label">Review</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" name="review" id="review" placeholder="Write review" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+                {% endif %}
+                
+                <h4>Reviews sent:</h4>
+                <div class="card-deck">
+                    {% for review in reviews %}
+                    <div class="card bg-light mb-3">
+                        <div class="card-header">
+                            Rating: {{ review.rating }}
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p>{{ review.review }}</p>
+                                <footer class="blockquote-footer">{{ review.name }}</footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>No reviews yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</section>
+
 {% endblock %}

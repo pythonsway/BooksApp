@@ -1,6 +1,8 @@
 venv/
 .env
 .vscode/
+_temp/
+bash.exe.stackdump
 
 *.pyc
 __pycache__/
