@@ -6,7 +6,7 @@ from flask_session import Session
 from BooksApp import auth, books, db
 
 
-def create_app(test_config=None):
+def create_app():
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
