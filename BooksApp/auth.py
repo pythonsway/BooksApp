@@ -18,8 +18,10 @@ def register():
 
         if not username:
             error = 'Username is required.'
+
         elif not password:
             error = 'Password is required.'
+
         elif db.execute(
             'SELECT id FROM users WHERE name = :name', {'name': username}
         ).fetchone() is not None:
@@ -29,11 +31,11 @@ def register():
             db.execute(
                 'INSERT INTO users (name, password) VALUES (:name, :password)',
                 {'name': username,
-                    'password': generate_password_hash(password)}
-            )
+                 'password': generate_password_hash(password)})
             db.commit()
             session['username'] = username
             return redirect(url_for('books.index'))
+
         flash(error)
 
     return render_template('auth/register.html')
@@ -51,6 +53,7 @@ def login():
 
         if user is None:
             error = 'Incorrect username.'
+
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
 
@@ -59,11 +62,11 @@ def login():
             session['user_id'] = user['id']
             session['username'] = user['name']
             return redirect(url_for('books.index'))
-  
+
+        flash(error)
+
     if 'user_id' in session:
         return redirect(url_for('books.index'))
-
-    flash(error)
 
     return render_template('auth/login.html')
 
