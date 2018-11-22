@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Page Not Found{% endblock %}
+
+{% block content %}
+
+<header class="d-flex pt-5">
+    <div class="container text-center align-content-end">
+        <h1 class="mb-2">Page Not Found</h1>
+        <h2>
+            <em>What you were looking for is just not there</em>
+        </h2>
+    </div>
+</header>
+
+<section class="content-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="row">
+                    <div class="col m-5">
+                        <a class="btn btn-dark btn-xl m-3" href="{{ url_for('books.index') }}">Go Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

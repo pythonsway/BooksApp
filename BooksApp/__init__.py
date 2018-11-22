@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_session import Session
 
 from BooksApp import auth, books, db
@@ -12,8 +12,7 @@ def create_app():
 
     # Typical dealing with variables
     # app.config.from_object('config')
-    # app.config.from_pyfile('config.py')
-
+    # app.config.from_pyfile('config.py')  
 
     app.config.from_mapping(SECRET_KEY=os.getenv("SECRET_KEY"),
                             DATABASE_URL=os.getenv("DATABASE_URL"),)
@@ -28,4 +27,11 @@ def create_app():
 
     app.add_url_rule('/', endpoint='index')
 
+    # 'Page not found' handling
+    app.register_error_handler(404, page_not_found)
+
     return app
+
+
+def page_not_found(e):
+  return render_template('404.html'), 404
